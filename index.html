@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuerpo & Tiempo — Aventura del Desarrollo Físico</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<!-- ========================== TITLE SCREEN ========================== -->
+<div class="screen active" id="title-screen">
+  <div class="pixel-title">⚔ CUERPO<br>& TIEMPO</div>
+  <div class="title-sub">aventura del desarrollo físico adulto</div>
+
+  <img class="pixel-sprite title-sprite" id="title-sprite" src="" alt="Explorador pixel art" style="animation: heroIdle 0.8s steps(2) infinite;">
+
+  <div class="title-story">
+    ¡Bienvenido, explorador! El reino del conocimiento necesita tu ayuda.<br><br>
+    Debes atravesar <strong>3 zonas del Desarrollo Físico Adulto</strong> y derrotar a los guardianes del olvido respondiendo sus preguntas.<br><br>
+    ¿Tienes el coraje para completar la aventura?
+  </div>
+
+  <div class="zones-preview">
+    <div class="zone-chip z1">🌿 ZONA I<span>20-35 años</span></div>
+    <div class="zone-chip z2">🏜 ZONA II<span>35-50 años</span></div>
+    <div class="zone-chip z3">🏔 ZONA III<span>50-65 años</span></div>
+  </div>
+
+  <button class="btn-pixel btn-start" onclick="startGame()" autofocus>▶ INICIAR AVENTURA</button>
+</div>
+
+<!-- ========================== MAP SCREEN ========================== -->
+<div class="screen" id="map-screen">
+  <div class="map-header">🗺 MAPA DEL MUNDO</div>
+  <div class="map-subtitle">Selecciona una zona para explorar</div>
+
+  <div class="map-toast" id="map-toast"></div>
+
+  <div class="map-status">
+    <img class="pixel-sprite map-sprite" id="map-sprite" src="" alt="Explorador">
+    <div class="status-info">
+      <div class="status-name">EXPLORADOR</div>
+      <div class="hp-bar-wrap">
+        <span class="hp-label">HP</span>
+        <div class="hp-track"><div class="hp-fill" id="map-hp-fill" style="width:100%"></div></div>
+        <span class="hp-num" id="map-hp-num">100/100</span>
+      </div>
+    </div>
+    <div class="status-score">
+      <div class="score-label">PUNTOS</div>
+      <div class="score-val" id="map-score">0</div>
+    </div>
+  </div>
+
+  <div class="world-map">
+    <div class="map-zone zone-1" id="zone-node-0" onclick="enterZone(0)" tabindex="0">
+      <div class="zone-icon">🌿</div>
+      <div class="zone-info">
+        <div class="zone-name">ZONA I — BOSQUE VITAL</div>
+        <div class="zone-desc">Adulto Joven (20–35 años)<br>Pico físico, metabolismo, capacidades sensoriales</div>
+        <div class="zone-stars" id="stars-0">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <div class="replay-badge">🔄 PRÁCTICA</div>
+      </div>
+    </div>
+    <div class="map-zone zone-2 locked" id="zone-node-1" onclick="enterZone(1)" tabindex="0">
+      <div class="zone-icon">🏜</div>
+      <div class="zone-info">
+        <div class="zone-name">ZONA II — DESIERTO DEL CAMBIO</div>
+        <div class="zone-desc">Adulto Medio (35–50 años)<br>Sarcopenia, menopausia, andropausia, visión</div>
+        <div class="zone-stars" id="stars-1">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <div class="replay-badge">🔄 PRÁCTICA</div>
+      </div>
+    </div>
+    <div class="map-zone zone-3 locked" id="zone-node-2" onclick="enterZone(2)" tabindex="0">
+      <div class="zone-icon">🏔</div>
+      <div class="zone-info">
+        <div class="zone-name">ZONA III — MONTAÑAS DEL CAMBIO</div>
+        <div class="zone-desc">Adultez Media-Tardía (45–65 años)<br>Crisis de la edad media, cambios hormonales, cardiovascular</div>
+        <div class="zone-stars" id="stars-2">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <div class="replay-badge">🔄 PRÁCTICA</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================== BATTLE SCREEN ========================== -->
+<div class="screen" id="battle-screen">
+  <div class="battle-bg" id="battle-bg">
+    <!-- Slash effect (hidden by default) -->
+    <div class="slash-effect" id="slash-effect"></div>
+
+    <img class="pixel-sprite enemy-sprite-img" id="enemy-sprite" src="" alt="Guardián">
+    <div class="enemy-hp-bar">
+      <div class="enemy-hp-label" id="enemy-name-label">GUARDIÁN</div>
+      <div class="enemy-hp-track"><div class="enemy-hp-fill" id="enemy-hp-fill"></div></div>
+    </div>
+    <img class="pixel-sprite battle-hero-sprite" id="battle-hero" src="" alt="Explorador">
+
+    <!-- Hero HP bar (bottom-left) -->
+    <div class="hero-battle-hp">
+      <div class="hero-battle-hp-label">🧙 EXPLORADOR</div>
+      <div class="hp-bar-wrap">
+        <div class="hp-track hero-hp-track"><div class="hp-fill" id="battle-hp-fill" style="width:100%"></div></div>
+        <span class="hp-num" id="battle-hp-num">100/100</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="battle-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="battle-zone-tag" id="battle-zone-tag">🌿 ZONA I</div>
+      <div class="question-progress" id="q-progress">1/5</div>
+    </div>
+
+    <div class="question-box" id="question-text" tabindex="-1">Cargando...</div>
+
+    <div class="choices" id="choices-grid"></div>
+
+    <div class="key-hint">
+      Teclas <kbd>1</kbd>–<kbd>4</kbd> para responder · <kbd>Enter</kbd> para continuar
+    </div>
+
+    <div class="explanation-box" id="explanation-box"></div>
+
+    <div class="battle-footer">
+      <button class="btn-pixel btn-next" id="continue-btn" style="display:none" onclick="nextBattleQ()">CONTINUAR ▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================== LEVEL UP SCREEN ========================== -->
+<div class="screen" id="levelup-screen">
+  <div class="levelup-badge" id="levelup-badge">🏆</div>
+  <div class="levelup-title" id="levelup-title">¡ZONA SUPERADA!</div>
+  <div class="levelup-sub" id="levelup-sub">Has derrotado al guardián.</div>
+  <div class="xp-gained" id="xp-gained">+100 XP</div>
+  <div class="hp-recovered" id="hp-recovered" style="display:none">💙 +30 HP RECUPERADO</div>
+  <div class="replay-notice" id="replay-notice" style="display:none">Modo práctica: sin puntuación adicional.</div>
+  <div class="stats-gained" id="stats-gained"></div>
+  <button class="btn-pixel btn-next" id="levelup-continue-btn" onclick="continueFromLevelup()" autofocus>AL MAPA ▶</button>
+</div>
+
+<!-- ========================== GAME OVER SCREEN ========================== -->
+<div class="screen" id="gameover-screen">
+  <div style="font-size:80px">💀</div>
+  <div class="gameover-title">GAME<br>OVER</div>
+  <div class="gameover-msg" id="gameover-msg">Tu HP llegó a 0. Los guardianes del olvido han ganado esta vez... ¡pero el conocimiento siempre da otra oportunidad!</div>
+  <button class="btn-pixel btn-start" onclick="restartGame()" autofocus>↺ INTENTAR DE NUEVO</button>
+</div>
+
+<!-- ========================== VICTORY SCREEN ========================== -->
+<div class="screen" id="victory-screen">
+  <div class="trophy-row">🥇🏆🥇</div>
+  <div class="victory-title">¡AVENTURA<br>COMPLETADA!</div>
+  <div class="final-score-box">
+    <div class="final-score-label">PUNTUACIÓN FINAL</div>
+    <div class="final-score-num" id="final-score">0</div>
+    <div class="final-grade" id="final-grade">RANGO A</div>
+  </div>
+  <div class="stats-gained" id="victory-stats"></div>
+  <div class="levelup-sub" id="victory-msg">¡Excelente trabajo!</div>
+  <div class="credits-text">
+    Referencias: Papalia & Martorell (2021) · Triadó & Celdrán (2019) · Carabali (2020) · García Madruga & Delval (2019)<br>
+    <em>UNAD — Psicología del Desarrollo</em>
+  </div>
+  <button class="btn-pixel btn-start" onclick="restartGame()" autofocus>↺ JUGAR DE NUEVO</button>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
